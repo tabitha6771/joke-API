@@ -1,25 +1,49 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [joke, setJoke] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const fetchJoke = () => {
+        setLoading(true);
+        fetch('https://official-joke-api.appspot.com/random_joke')
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setJoke(`${data.setup} - ${data.punchline}`);
+                setLoading(false);
+            })
+            .catch((error) => {
+                setError(error.message);
+                setLoading(false);
+            });
+    };
+
+    useEffect(() => {
+        fetchJoke();
+    }, []);
+
+    return (
+        <div className="app">
+            <h1>Joke Fetcher</h1>
+            {loading ? (
+                <p>Loading...</p>
+            ) : error ? (
+                <p>Error: {error}</p>
+            ) : (
+                <>
+                    <p className="joke">{joke}</p>
+                    <button onClick={fetchJoke} className="joke-button">Tell another joke</button>
+                </>
+            )}
+        </div>
+    );
 }
 
 export default App;
