@@ -1,3 +1,7 @@
+Bootcamp Project
+
+During the bootcamp we were tasked with developing an app that used an API of our choosing. 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
